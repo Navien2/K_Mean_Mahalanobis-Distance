@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.navien.kmeanmahalanobis;
+package com.navien.deprecated;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -26,18 +26,21 @@ import org.jfree.chart.renderer.xy.XYDotRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.ApplicationFrame;
 
+import com.navien.kmeanmahalanobis.Kmeans;
+import com.navien.kmeanmahalanobis.Triplet;
+
 /**
  * Plots a Kmean instance
  */
 public class KMeanChart extends ApplicationFrame {
 
-    public Kmean1 kmean;
+    public Kmeans kmean;
 
     public XYPlot plot;
     
     private int plotCount;
 
-    public KMeanChart(String title, Kmean1 kmean) {
+    public KMeanChart(String title, Kmeans kmean) {
         super(title);
         this.kmean = kmean;
     }
@@ -258,7 +261,7 @@ public class KMeanChart extends ApplicationFrame {
             ArrayList dataList = new ArrayList();
 
             //Correct
-            List<Data> clusterResult = new ArrayList<>();
+            List<Triplet> clusterResult = new ArrayList<>();
 
             for (int j = 0; j < kmean.getData().length; j++) {
                 // calling data belong to cluster i    
@@ -266,11 +269,11 @@ public class KMeanChart extends ApplicationFrame {
 
                     System.out.print("(" + kmean.getData()[j][0] + "," + kmean.getData()[j][1] + "," + kmean.getId()[j] + "), "); //we should remove the last one since we omit ID 
 
-                    Data dataToAddToList = new Data();
+                    Triplet dataToAddToList = new Triplet();
 
-                    dataToAddToList.ID = kmean.getId()[j];
-                    dataToAddToList.D1 = kmean.getData()[j][0];
-                    dataToAddToList.D2 = kmean.getData()[j][1];
+                    dataToAddToList.id = kmean.getId()[j];
+                    dataToAddToList.d1 = kmean.getData()[j][0];
+                    dataToAddToList.d2 = kmean.getData()[j][1];
 
                     clusterResult.add(dataToAddToList);
 

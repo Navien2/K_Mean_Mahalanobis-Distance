@@ -1,4 +1,4 @@
-package com.navien.kmeanmahalanobis;
+package com.navien.deprecated;
 
 public class matrix {
     

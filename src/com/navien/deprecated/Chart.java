@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.navien.kmeanmahalanobis;  // put com  in package creation to make it unique not clash with other code and packagees
+package com.navien.deprecated;  // put com  in package creation to make it unique not clash with other code and packagees
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

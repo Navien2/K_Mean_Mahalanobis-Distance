@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.navien.kmeanmahalanobis;
+package com.navien.deprecated;
 
 /**
  * myResult1 = new KMeansResult(5, 6); myResult2 = new KMeansResult(6, 7);

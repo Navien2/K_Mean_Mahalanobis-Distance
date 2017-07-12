@@ -1,4 +1,4 @@
-package com.navien.kmeanmahalanobis;
+package com.navien.deprecated;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

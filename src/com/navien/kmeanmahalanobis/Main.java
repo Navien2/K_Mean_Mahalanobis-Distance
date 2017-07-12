@@ -7,6 +7,9 @@ package com.navien.kmeanmahalanobis;
 import java.io.IOException;
 import java.util.List;
 
+import com.navien.deprecated.KMeanChart;
+import com.navien.deprecated.KMeansResult;
+
 /**
  *
  * @author navien
@@ -15,27 +18,20 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 
-		// String thefile = "Data.csv"; // file path
-		String thefile = "dataset3ID.csv";
+		String filename = "dataset3ID.csv";
 
-		CsvReader reader = new CsvReader();
+		List<Triplet> tripletList = Triplet.readTripletsFromCSV(filename, true);
 
-		// String content = reader.readFile(thefile, true);
-		reader.readFile(thefile, true);
+		int tripletSize = tripletList.size();
+		String[] ids = new String[tripletSize];
+		double[][] data = new double[tripletSize][2];
 
-		List<Data> dataFile = reader.getData(thefile, true);
+		for (int i = 0; i < tripletSize; i++) {
+			Triplet t = tripletList.get(i);
 
-		double[][] data = new double[dataFile.size()][];
-
-		String[] Id = new String[dataFile.size()];
-
-		for (int i = 0; i < dataFile.size(); i++) {
-			data[i] = new double[] { dataFile.get(i).D1, dataFile.get(i).D2 };
-
-			Id[i] = dataFile.get(i).ID;
+			ids[i] = t.id;
+			data[i] = new double[] { t.d1, t.d2 };
 		}
-
-		// System.out.println(data);
 
 		int clusterNumber = 2;
 
@@ -46,7 +42,7 @@ public class Main {
 		float threshold = 0.001f;
 		//
 		// Kmean1 kMean = new Kmean1(rawData, threshold, clusterNumber, selectedType, p, Dim);
-		Kmean1 kMean = new Kmean1(data, threshold, clusterNumber, selectedType, p, Dim, Id);
+		Kmeans kMean = new Kmeans(data, threshold, clusterNumber, selectedType, p, Dim, ids);
 
 		kMean.plotDataset(data);
 

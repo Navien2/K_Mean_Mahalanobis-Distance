@@ -1,4 +1,4 @@
-package com.navien.kmeanmahalanobis;
+package com.navien.deprecated;
 
 import org.jfree.data.*;
 import org.jfree.data.xy.AbstractXYDataset;
