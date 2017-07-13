@@ -4,6 +4,9 @@
  */
 package com.navien.kmeanmahalanobis;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -61,26 +64,43 @@ public class Utils {
 		return mat;
 	}
 
-	// mean randomly
+	/**
+	 * return nPoints randomly chosen points from the given data
+	 * 
+	 * @param data
+	 * @param nPoints
+	 * @return a 2-dim double array
+	 */
+	static public double[][] getRandomPoints(double[][] data, int nPoints) {
+		int nRows = data.length;
+		int nCols = data[0].length;
 
-	static public double[][] datasample(double[][] data, int k) {
-		int n_indeces = k;
-		int data_rows = data.length;
-		int data_cols = data[0].length;
+		if (nPoints > nRows)
+			throw new RuntimeException(
+					"Requested more random points than total number of points in data");
 
-		double[][] y = new double[n_indeces][data_cols];
-		Random rand = new Random(System.currentTimeMillis()); // would make this static to the class
-		int[] data_indeces = new int[n_indeces];
-		for (int i = 0; i < n_indeces; i++) {
-			// be sure to use Vector.remove() or you may get the same item twice
-			data_indeces[i] = rand.nextInt(data_rows);
-			for (int j = 0; j < data_cols; j++) {
-				y[i][j] = data[data_indeces[i]][j];
-			}
-			System.out.println(data_indeces[i] + 2);
+		double[][] randomPoints = new double[nPoints][nCols];
+
+		List<Integer> randomIndices = new ArrayList<Integer>();
+		Random rand = new Random();
+
+		for (int i = 0; i < nPoints; i++) {
+			// keep generating a random number until
+			int randomIndex = rand.nextInt(nRows);
+			while (randomIndices.contains(randomIndex))
+				randomIndex = rand.nextInt(nRows);
+
+			randomIndices.add(randomIndex);
+			randomPoints[i] = data[randomIndex];
 		}
 
-		return y;
+		return randomPoints;
 	}
 
+	public static void main(String[] args) {
+		double[][] data = { { 1, 1 }, { 2, 2 }, { 3, 3 } };
+
+		double[][] randPoints = getRandomPoints(data, 2);
+		System.out.println(Arrays.deepToString(randPoints));
+	}
 }

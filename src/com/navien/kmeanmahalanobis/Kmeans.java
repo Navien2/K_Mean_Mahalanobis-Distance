@@ -46,22 +46,11 @@ public class Kmeans {
 		this.minChange = minChange;
 		this.clusterNumber = clusterNumber;
 		this.type = type;
-		this.centroids = Utils.datasample(data, clusterNumber);
+		this.centroids = Utils.getRandomPoints(data, clusterNumber);
 		this.sigma = Utils.computeCovarianceMatrix(data);
 		this.Dim = Dim;
 		this.Id = Id;
 
-	}
-
-	/**
-	 * 
-	 */
-	public Kmeans() {
-
-	}
-
-	private static void plotResut(KMeansResult result) {
-		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	/**
