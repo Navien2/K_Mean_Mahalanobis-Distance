@@ -16,6 +16,8 @@ import java.util.Random;
  */
 public class Utils {
 
+	private static Random RNG = new Random();
+
 	/**
 	 * Prints a 2-dim array of doubles
 	 * 
@@ -68,7 +70,10 @@ public class Utils {
 	 * return nPoints randomly chosen points from the given data
 	 * 
 	 * @param data
+	 *            all points
 	 * @param nPoints
+	 *            the number of points to return
+	 * 
 	 * @return a 2-dim double array
 	 */
 	static public double[][] getRandomPoints(double[][] data, int nPoints) {
@@ -81,16 +86,20 @@ public class Utils {
 
 		double[][] randomPoints = new double[nPoints][nCols];
 
+		// keep track of indices already selected so they are not selected again
 		List<Integer> randomIndices = new ArrayList<Integer>();
-		Random rand = new Random();
 
 		for (int i = 0; i < nPoints; i++) {
-			// keep generating a random number until
-			int randomIndex = rand.nextInt(nRows);
-			while (randomIndices.contains(randomIndex))
-				randomIndex = rand.nextInt(nRows);
 
+			// keep generating a random number until a new one is found
+			int randomIndex = RNG.nextInt(nRows);
+			while (randomIndices.contains(randomIndex))
+				randomIndex = RNG.nextInt(nRows);
+
+			// save the index selected
 			randomIndices.add(randomIndex);
+
+			// add the random point to the results array
 			randomPoints[i] = data[randomIndex];
 		}
 
