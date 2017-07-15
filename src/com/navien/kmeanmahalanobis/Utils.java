@@ -9,6 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import com.navien.deprecated.InvMat;
+import com.navien.deprecated.matrix;
+import com.navien.deprecated.vector;
+
 /**
  * Do not repeat yourself
  * 
@@ -37,33 +41,60 @@ public class Utils {
 
 	}
 
-	static public double[][] computeCovarianceMatrix(double[][] data) {
-		// calculate mean:
-		int data_rows = data.length;
-		int data_cols = data[0].length;
-		double[] mean = new double[data_cols];
+	/**
+	 * The mean of a 2-dim array
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public static double[] getMean(double[][] data) {
+		int noRows = data.length;
+		int noCols = data[0].length;
 
-		for (int c = 0; c < data_cols; c++) {
+		double[] mean = new double[noCols];
+		for (int c = 0; c < noCols; c++) {
 			mean[c] = 0;
-			for (int r = 0; r < data_rows; r++) {
+			for (int r = 0; r < noRows; r++)
 				mean[c] += data[r][c];
-			}
-			mean[c] /= data_rows;
+
+			mean[c] /= noRows;
 		}
 
-		// compute covariance
-		final double[][] mat = new double[data_cols][data_cols];
-		for (int r = 0; r < data_cols; r++) { // rows
-			for (int c = r; c < data_cols; c++) { // cols
+		return mean;
+	}
+
+	/**
+	 * Return the covariance value of two values from a given mean
+	 */
+	public static double getCovariance(double x, double y, double mean) {
+		return (x - mean) * (y - mean);
+	}
+
+	/**
+	 * Return the covariance matrix of data. Each column of the given data represents a random
+	 * variable
+	 */
+	static public double[][] getCovarianceMatrix(double[][] data) {
+
+		double[] mean = getMean(data);
+
+		int noRows = data.length;
+		int noCols = data[0].length;
+
+		final double[][] covarianceMatrix = new double[noCols][noCols];
+
+		for (int r = 0; r < noCols; r++) {
+			for (int c = r; c < noCols; c++) {
 
 				double sum = 0;
-				for (int i = 0; i < data_rows; i++) {
-					sum += (data[i][r] - mean[c]) * (data[i][c] - mean[c]);
-				}
-				mat[r][c] = mat[c][r] = sum / (data_rows - 1);
+				for (int i = 0; i < noRows; i++)
+					sum += getCovariance(data[i][r], data[i][c], mean[c]);
+
+				covarianceMatrix[r][c] = covarianceMatrix[c][r] = sum / (noRows - 1);
 			}
 		}
-		return mat;
+
+		return covarianceMatrix;
 	}
 
 	/**
@@ -106,10 +137,67 @@ public class Utils {
 		return randomPoints;
 	}
 
-	public static void main(String[] args) {
-		double[][] data = { { 1, 1 }, { 2, 2 }, { 3, 3 } };
+	/**
+	 * Calculates Euclidean distance of two points
+	 * 
+	 * @param a
+	 *            first point
+	 * @param b
+	 *            second point
+	 * @return the euclidean distance as a double value
+	 */
+	public static double euclideanDistance(double[] a, double[] b) {
+		return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2));
+	}
 
+	/**
+	 * Malanobis
+	 * 
+	 * @param a
+	 * @param b
+	 * @param Sigma
+	 * @return
+	 * @throws Exception
+	 */
+	public static double mahalanobisDistance(double[] a, double[] b, double[][] Sigma) {
+
+		double[][] Sigma_inverse = InvMat.Inverse(Sigma);
+
+		double[][] diff = new double[1][a.length];
+
+		for (int i = 0; i < a.length - 1; i++) {
+			diff[0][i] = a[i] - b[i];
+		}
+
+		double result[][] = vector.mulMatrix(diff, Sigma_inverse);
+
+		result = vector.mulMatrix(result, matrix.Transpose(diff));
+		return Math.sqrt(result[0][0]);
+	}
+
+	private static void testGetRandomPoints() {
+		double[][] data = { { 1, 1 }, { 2, 2 }, { 3, 3 } };
 		double[][] randPoints = getRandomPoints(data, 2);
 		System.out.println(Arrays.deepToString(randPoints));
+	}
+
+	private static void testEuclideanDistance() {
+		double[] a = { 0, 0 };
+		double[] b = { 3, 4 };
+
+		double distance = euclideanDistance(a, b);
+		System.out.println(distance);
+	}
+
+	private static void testGetCovarianceMatrix() {
+		double[][] data = { { 2, 1 }, { 4, 2 }, { 6, 3 } };
+		double[][] covMatrix = getCovarianceMatrix(data);
+		System.out.println(Arrays.deepToString(covMatrix));
+	}
+
+	public static void main(String[] args) {
+		// testGetRandomPoints();
+		// testEuclideanDistance();
+		testGetCovarianceMatrix();
 	}
 }
